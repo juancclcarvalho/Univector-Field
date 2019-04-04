@@ -45,18 +45,21 @@ def getOmega(s_x, s_y, v_x, v_y):
     elif delta_y >= de:
         omega = calc_utils.getPhi(theta, ppr, ccw, de, kr)
 
+    print(v_x, v_y)
+
+
     return omega
 
-def getVectors(w, h, step):
+def getVectors(w, h, step, n):
     vectors = []
     for i in range(0, w, step):
         for j in range(0, h, step):
-            omega = getOmega(spiral_center_x, spiral_center_y, i, j)
+            omega = getOmega(spiral_center_x, spiral_center_y, j, n - i)
             vectors.append([math.cos(omega), math.sin(omega)])
     return vectors
 
 def main():
-    vectors = getVectors(h, w, step)
+    vectors = getVectors(h, w, step, n)
     vectorField = draw.drawVectorField(copy(field), vectors, h, w, step)
     cv2.imshow('field', vectorField)
     cv2.waitKey(0)
@@ -65,6 +68,7 @@ def main():
 
 if __name__ == '__main__':
     h, w = 675, 585
+    n = w
     # makes field background
     field = np.zeros((w, h, 3)) # colored image
     main()
