@@ -1,4 +1,4 @@
-import math
+from math import *
 
 def getDelta(x1,y1,x2,y2):
     '''
@@ -13,7 +13,7 @@ def getDistance(d_x, d_y):
     Input:  q: Constant
             d_x: x-axis variation
     '''
-    return math.sqrt((d_x**2) + (d_y**2))
+    return sqrt((d_x**2) + (d_y**2))
 
 def getTheta(d_x, d_y):
     '''
@@ -21,12 +21,24 @@ def getTheta(d_x, d_y):
     Input:  d_x: x-axis variation
             d_y: y-axis variation
     '''
-    return math.atan2(d_y, d_x)
+    return atan2(d_y, d_x)
 
 def getPhi(theta, pp, d, de, kr):
     if pp > de:
-        phi = theta + d * (math.pi / 2) * (2 - ((de + kr) / (pp + kr)))
-    elif pp >= 0 and pp <= de:
-        phi = theta + d * (math.pi / 2) * math.sqrt(pp / de)
+        phi = theta + d * (pi / 2) * (2 - ((de + kr) / (pp + kr)))
+    else:
+        phi = theta + d * (pi / 2) * sqrt(pp / de)
 
-    return phi
+    if d:
+        return wrap2pi(theta + phi)
+    else:
+        return wrap2pi(theta - phi)
+
+def wrap2pi(theta):
+    if theta > pi:
+        return theta - 2*pi
+    if theta < -pi:
+        return 2*pi + theta
+    else:
+        return theta
+
