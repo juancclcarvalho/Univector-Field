@@ -3,8 +3,8 @@ class Const:
     spiral_center_x = 338
     spiral_center_y = 293
     direction = 1
-    de = 5.37
-    kr = 4.15
+    de = 24.165
+    kr = 18.675
     step = 15
 
     # Pixel converter

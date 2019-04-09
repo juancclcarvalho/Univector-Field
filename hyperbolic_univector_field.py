@@ -26,7 +26,8 @@ def calcPhi(s_x, s_y, v_x, v_y, d):
     pp = calc_utils.getDistance(delta_x, delta_y)
     theta = calc_utils.getTheta(delta_x, delta_y)
 
-    return calc_utils.getPhi(theta, pp, d, de, kr)
+    phi, __ = calc_utils.getPhi_h(theta, pp, d, de, kr)
+    return phi
 
 
 def getVectors(w, h, step):
@@ -36,18 +37,14 @@ def getVectors(w, h, step):
             phi = calcPhi(spiral_center_x, spiral_center_y, i, j, direction)
             vectors.append([math.cos(phi), math.sin(phi)])
     return vectors
-
-
-def main():
-    vectors = getVectors(h, w, step)
-    vectorField = draw.drawVectorField(copy(field), vectors, h, w, step)
-    cv2.imshow('field', vectorField)
-    cv2.waitKey(0)
-    cv2.destroyAllWindows()
-
+    
 
 if __name__ == '__main__':
     h, w = 675, 585
     # makes field background
     field = np.zeros((w, h, 3)) # colored image
-    main()
+    vectors = getVectors(h, w, step)
+    vectorField = draw.drawVectorField(copy(field), vectors, h, w, step)
+    cv2.imshow('field', vectorField)
+    cv2.waitKey(0)
+    cv2.destroyAllWindows()
