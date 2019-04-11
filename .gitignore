@@ -1,5 +1,7 @@
 __pycache__
-matrix_coordinates_adjust.py
 .vscode
-table_test.py
-encapsulation
+test.py
+hyperbolic_spiral.py
+repulsive.py
+move_to_goal.py
+cm

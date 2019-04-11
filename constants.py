@@ -1,18 +1,19 @@
 class Const:
-    # Hyperbolic and move2goal fields
-    spiral_center_x = 338
-    spiral_center_y = 293
-    direction = 1
-    de = 24.165
-    kr = 18.675
-    step = 15
-
     # Pixel converter
     arena_w = 150
     arena_h = 130
     default_convertion_factor = 4.5
     img_w = 675
-    img_h = 0
+    img_h = 585
+
+
+    # Hyperbolic and move2goal fields
+    spiral_center_x = arena_w / 2
+    spiral_center_y = arena_h / 2
+
+    de = 5.37
+    kr = 4.15
+    step = 3
 
     def __init__(self):
         pass

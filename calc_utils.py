@@ -1,48 +1,89 @@
-from math import *
+from math import cos, sin, pi
+import math
+import numpy as np
+from constants import Const
 
-def getDelta(x1,y1,x2,y2):
-    '''
-    Calculates the x-axis variation
-    Input:  x1 and x2: Initial and final x-axis and y-axis coordinates
-    '''
-    return x2 - x1, y2 - y1
+kr = Const.kr
+radius = Const.de
+origin = (Const.spiral_center_x, Const.spiral_center_y)
 
-def getDistance(d_x, d_y):
-    '''
-    Gets the distance vector (ro) between the spiral's central point and the vector origin
-    Input:  q: Constant
-            d_x: x-axis variation
-    '''
-    return sqrt((d_x**2) + (d_y**2))
+def Nh(phi):
+    return np.array([cos(phi), sin(phi)])
 
-def getTheta(d_x, d_y):
+def wrapToPi(phi):
     '''
-    Gets the theta angle between distance vector (ro) and the x-axis
-    Input:  d_x: x-axis variation
-            d_y: y-axis variation
+    Wrap a given angle to interval [-pi, pi]
+    Input: (float) phi
     '''
-    return atan2(d_y, d_x)
-
-def getPhi_h(theta, ro, dir, de, kr):
-    if ro > de:
-        phi = theta + dir * (pi / 2) * (2 - ((de + kr) / (ro + kr)))
+    if phi > pi:
+        return phi - 2 * pi
+    if phi < -pi:
+        return 2 * pi + phi
     else:
-        phi = theta + dir * (pi / 2) * sqrt(ro / de)
+        return phi
 
-    if dir:
-        wrapped_phi = wrap_to_pi(theta + phi)
+def delta(x_1, y_1, x_2, y_2):
+    '''
+    Returns the x-axis and y-axis variation between two points
+    Input: (tuple) origin - origin x-axis and y-axis coordinate
+           (int) v_x - vector x-axis coordinate
+           (int) v_y - vector y-axis coordinate
+    '''
+
+    return x_2 - x_1, y_2 - y_1
+
+def theta(d_x, d_y):
+    '''
+    Returns the angle from x-axis at position p
+    Input: (int) d_x - x-axis variation
+           (int) d_y - y-axis variation
+    '''
+    return math.atan2(d_y, d_x)
+
+def ro(d_x, d_y):
+    '''
+    Returns the distance between the origin and p
+    '''
+    return math.sqrt(d_x ** 2 + d_y ** 2)
+
+def phiH(ro, theta, cw=False, radius=radius):
+    if ro > radius:
+        angle = (pi / 2) * (2 - ((radius + kr) / (ro + kr)))
+    elif 0 <= ro <= radius:
+        angle = (pi / 2) * math.sqrt(ro / radius)
+
+    if cw:
+        """ return wrapToPi(theta + angle) """
+        return theta + angle
     else:
-        wrapped_phi = wrap_to_pi(theta - phi)
-    return phi, wrapped_phi
+        """ return wrapToPi(theta - angle) """
+        return theta - angle
 
-def wrap_to_pi(theta):
-    if theta > pi:
-        return theta - 2*pi
-    if theta < -pi:
-        return 2*pi + theta
-    else:
-        return theta
+def phiTuf(theta, d_x, d_y, radius=radius):
+    y_l = d_y + radius
+    y_r = d_y - radius
 
-def getPhi_tuf():
-    pass
+    ro_l = ro(d_x, d_y - radius)
+    ro_r = ro(d_x, d_y + radius)
+
+    phi_ccw = phiH(ro_l, theta, cw=True) #changed
+    phi_cw = phiH(ro_r, theta, cw=False) #changed
+
+    nh_ccw = Nh(phi_ccw)
+    nh_cw = Nh(phi_cw)
+
+    vec = (abs(y_l) * nh_ccw + abs(y_r) * nh_cw) / (2 * radius)
+
+    if -radius <= d_y < radius:
+        phi_tuf = math.atan2(vec[1], vec[0])
+    elif d_y < -radius:
+        phi_tuf = phiH(ro_l, theta, cw=False) #changed
+    elif d_y >= radius:
+        phi_tuf = phiH(ro_r, theta, cw=True) #changed
+
+    return Nh(phi_tuf)
+
+
+
+
 
