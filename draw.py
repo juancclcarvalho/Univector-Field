@@ -10,11 +10,9 @@ def drawVector(field, origin, end):
 
 
 def drawVectorField(field, vectors, w, h, step):
-    print(w, h)
     length = 10
     k = 0
     #cv2.circle(field, toggleY(convertToPixel(Const.spiral_center_x),convertToPixel(Const.spiral_center_y),h), 5, (0, 255, 255), -1)
-    cv2.circle(field, toggleY(convertToPixel(75), convertToPixel(65), convertToPixel(h)), 5, (0, 255, 255), -1)
     for x in range(0, w, step):
         for y in range(0, h, step):
             origin = toggleY(convertToPixel(x), convertToPixel(y), convertToPixel(h))

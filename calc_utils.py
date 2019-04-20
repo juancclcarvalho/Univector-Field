@@ -83,6 +83,28 @@ def phiTuf(theta, d_x, d_y, radius=radius):
 
     return Nh(phi_tuf)
 
+def phiAuf(origin, r_x, r_y, d_robot_x, d_robot_y):
+    obs_x, obs_y = origin
+    v_obs = np.array([100, 100])
+    v_robot = np.array([0, 100])
+    ko = 0.12
+
+    p_obstacle = np.array([obs_x, obs_y])
+    s = ko * (v_obs - v_robot)
+    s_abs = math.sqrt(s[0]**2 + s[1]**2)
+    d = ro(d_robot_x, d_robot_y)
+
+    if d >= s_abs:
+        p_line_obs = p_obstacle + s
+    else:
+        p_line_obs = p_obstacle + d * s / s_abs
+
+    delta_x, delta_y = delta(p_line_obs[0], p_line_obs[1], r_x, r_y)
+
+    phi_auf = theta(delta_x, delta_y)
+    
+    return Nh(phi_auf)
+
 
 
 
