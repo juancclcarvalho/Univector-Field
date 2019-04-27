@@ -1,12 +1,19 @@
-from constants import Const
 import math
+from random import randint
+from typing import Tuple
 
-arena_w = Const.arena_w
-arena_h = Const.arena_h
+# Pixel converter
+arena_w = 150 # cm
+arena_h = 130 # cm
+default_convertion_factor = 4.5
+img_w = 675 # px
+img_h = 585 # px
+step = 3 # cm
 
-img_w = Const.img_w
-img_h = Const.img_h
+ball = (randint(10, arena_w - 10), randint(10, arena_h - 10))
+obstacle = (randint(10, arena_w - 10), randint(10, arena_h - 10))
 
+# Gets the height/width or width/height proportion
 height_to_width = arena_w / arena_h
 width_to_height = arena_h / arena_w
 
@@ -15,10 +22,10 @@ if img_w:
 elif img_h:
     convertion_factor = img_h / arena_h
 else:
-    convertion_factor = Const.default_convertion_factor
+    convertion_factor = default_convertion_factor
 
+def setArenaSize() -> Tuple[int, int]:
 
-def setArenaSize():
     global img_w
     global img_h
     global arena_w
@@ -34,16 +41,13 @@ def setArenaSize():
     elif not img_h:
         img_h = round(width_to_height * img_w)
 
-    elif round(img_w/arena_w) != round(img_h/arena_h):
-        print("The given dimensions are not proportional to the arena dimensions")
-        img_w = arena_w
-        img_h = arena_h
-
     return img_w, img_h
 
-def convertToPixel(cm):
+def convertToPixel(cm: float) -> float:
+
     return round(cm * convertion_factor)
 
-def convertToCm(px):
+def convertToCm(px: float) -> float:
+    
     return round(px / convertion_factor)
     
