@@ -5,14 +5,34 @@ import math_utils
 import numpy as np
 from typing import List, Tuple
 
+def closestObstacle(x: int, y: int, obstacles: List[Tuple[int, int]]) -> Tuple[int, int]:
+    '''
+    Given an obstacles list, return the obstacle closest to the robot
+    '''
+    last_ro = 0
+    count = 0
+    for obstacle in obstacles:
+        obs_x, obs_y = obstacle
+        delta_x, delta_y = math_utils.delta_axis(x, y, obs_x, obs_y)
+        if not count:
+            last_ro = math_utils.norm(delta_x, delta_y)
+        if (math_utils.norm(delta_x, delta_y) <= last_ro):
+            closer_obs = obstacle
+            last_ro = math_utils.norm(delta_x, delta_y)
+        count += 1
+        
+    return closer_obs
+
 
 def Nh(phi: float) -> List[float]:
     return np.array([cos(phi), sin(phi)])
 
 
 def phiAuf(obs_x: int, obs_y: int, r_x: int, r_y: int, r_o_dist:float, v_obs: list = abstract.v_obstacle(), v_rob: list = abstract.v_robot(), ko: float = ko) -> float: # Avoid Obstacles
-
-    delta_x_r, delta_y_r = math_utils.delta_axis(obs_x, obs_y, r_x, r_y)
+    '''
+    Returns an avoidance coefficient, relative to the obstacle, considering the obstacle's position and velocity, 
+    as well as the robot's position and velocity
+    '''
     obstacle_position = np.array([obs_x, obs_y])
 
     s_vec = ko * (v_obs - v_rob)
@@ -30,8 +50,10 @@ def phiAuf(obs_x: int, obs_y: int, r_x: int, r_y: int, r_o_dist:float, v_obs: li
     return math_utils.wrapToPi(phi_auf)
 
 
-def phiComposed(phi_tuf: float, phi_auf: float, R: float, obstacles: List[Tuple], delta: float = delta, d_min: float = d_min) -> float:
-    
+def phiComposed(phi_tuf: float, phi_auf: float, R: float, obstacles: List[Tuple], delta: float = delta, d_min: float = d_min) -> float: # Composition
+    '''
+    Merges the avoidance and movement coefficients and returns a coefficient of movement, considering the obstacles and robot's position
+    '''
     if obstacles is None:
         phi_composed = math_utils.wrapToPi(phi_tuf)
     else:
@@ -49,7 +71,11 @@ def phiComposed(phi_tuf: float, phi_auf: float, R: float, obstacles: List[Tuple]
 
 def phiH(ro: float, theta: float, cw: bool = False, radius: float = de, kr: float = kr) -> float: # Hyperbolic
     '''
-    The direction of rotation of the spiral has been inverted, cause by passing as in the article, the clockwise direction becomes counterclockwise and vice versa
+    Returns a coefficient of a hyperbolic spiral that guides the robot to the ball
+    '''
+    '''
+    The direction of rotation of the spiral has been inverted, cause by passing as in the article, 
+    the clockwise direction becomes counterclockwise and vice versa
     '''
 
     if ro > radius:
@@ -64,11 +90,18 @@ def phiH(ro: float, theta: float, cw: bool = False, radius: float = de, kr: floa
 
 
 def phiR(d_x: float, d_y: float) -> float: # Repulsive
+    '''
+    Returns an avoidance coefficient, relative to the obstacle, considering nothing but the obstacle's 
+    position and the robot's position 
+    '''
     return atan2(d_y, d_x)
 
 
 def phiTuf(theta: float, d_x: float, d_y: float, radius: float = de) -> float: # Move to Goal
-
+    '''
+    Merges a clockwise and a counterclockwise hyperbolic spiral and returns a coefficient of 
+    movement that guides the robot to the ball, following the smallest path 
+    '''
     y_l = d_y + radius
     y_r = d_y - radius
 
@@ -80,8 +113,9 @@ def phiTuf(theta: float, d_x: float, d_y: float, radius: float = de) -> float: #
 
     nh_ccw = Nh(phi_ccw)
     nh_cw = Nh(phi_cw)
-
-    spiral_merge = (abs(y_l) * nh_ccw + abs(y_r) * nh_cw) / (2 * radius) # The absolute value of y_l and y_r was not specified in the article, but the obtained results with this trick are closer to the article images
+    # The absolute value of y_l and y_r was not specified in the article, but the obtained results 
+    # with this trick are closer to the article images
+    spiral_merge = (abs(y_l) * nh_ccw + abs(y_r) * nh_cw) / (2 * radius) 
 
     if -radius <= d_y < radius:
         phi_tuf = atan2(spiral_merge[1], spiral_merge[0])
@@ -93,21 +127,21 @@ def phiTuf(theta: float, d_x: float, d_y: float, radius: float = de) -> float: #
     return math_utils.wrapToPi(phi_tuf)
 
 
-def generateUnivectorField(r_x: int, r_y: int, ball_pos: Tuple[int, int], obs_pos: List[Tuple[int, int]]) -> float:
+def generateUnivectorField(r_x: int, r_y: int, ball_pos: Tuple[int, int], obs_pos: List[Tuple[int, int]], de: float = de, v_obs: list = abstract.v_obstacle(), v_rob: list = abstract.v_robot(), ko: float = ko, delta: float = delta, d_min: float = d_min) -> float:
 
     ball_x, ball_y = ball_pos
     d_ball_x, d_ball_y = math_utils.delta_axis(ball_x, ball_y, r_x, r_y)
     theta = phiR(d_ball_x, d_ball_y)
-    phi_tuf = phiTuf(theta, d_ball_x, d_ball_y)
+    phi_tuf = phiTuf(theta, d_ball_x, d_ball_y, de)
 
-    obstacle = abstract.closerObstacle(r_x, r_y, obs_pos)
+    obstacle = closestObstacle(r_x, r_y, obs_pos)
     obs_x, obs_y = obstacle
 
     robot_obs_x, robot_obs_y = math_utils.delta_axis(obs_x, obs_y, r_x, r_y)
     R = math_utils.norm(robot_obs_x, robot_obs_y)
     robot_obs_dist = math_utils.norm(robot_obs_x, robot_obs_y)
     
-    phi_auf = phiAuf(obs_x, obs_y, r_x, r_y, robot_obs_dist)
-    phi_composed = phiComposed(phi_tuf, phi_auf, R, obstacle)
+    phi_auf = phiAuf(obs_x, obs_y, r_x, r_y, robot_obs_dist, v_obs, v_rob, ko)
+    phi_composed = phiComposed(phi_tuf, phi_auf, R, obstacle, delta, d_min)
 
     return Nh(phi_composed)

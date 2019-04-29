@@ -15,7 +15,7 @@ def composition(r_x: int, r_y: int, ball_pos: Tuple[int, int], obs_pos: List[Tup
     theta = univector.phiR(d_ball_x, d_ball_y)
     phi_tuf = univector.phiTuf(theta, d_ball_x, d_ball_y)
 
-    obstacle = abstract.closerObstacle(r_x, r_y, obs_pos)
+    obstacle = univector.closestObstacle(r_x, r_y, obs_pos)
     obs_x, obs_y = obstacle
 
     robot_obs_x, robot_obs_y = math_utils.delta_axis(obs_x, obs_y, r_x, r_y)
