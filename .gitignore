@@ -1,6 +1,3 @@
 __pycache__
 .vscode
-test.py
-cm
-*.log
-composition_field.py
+.mypy_cache

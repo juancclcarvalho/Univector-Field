@@ -53,3 +53,12 @@ MIT
 ###### [Facebook]
 ###### [Twitter]
 ###### [Instagram]
+
+[Facebook]:<https://www.facebook.com/ararabots>
+[Twitter]:<https://twitter.com/ararabots>
+[Instagram]:<https://www.instagram.com/ararabots/>
+   [Evolutionary Univector Field-based Navigation
+with Collision Avoidance for Mobile Robot]: <https://pdfs.semanticscholar.org/2a9c/19f306bc82a8ac22ee285f3a213e27c1e968.pdf>
+[Python]: <https://www.python.org/downloads/>
+[OpenCV]: <https://opencv.org/releases/>
+[Ararabots]: <http://lia.facom.ufms.br/ararabots/2019/03/processo-seletivo-resultado-online/>
