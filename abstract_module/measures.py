@@ -43,11 +43,11 @@ def setArenaSize() -> Tuple[int, int]:
 
     return img_w, img_h
 
-def convertToPixel(cm: float) -> float:
+def convertToPixel(cm: float) -> int:
 
     return round(cm * convertion_factor)
 
-def convertToCm(px: float) -> float:
+def convertToCm(px: float) -> int:
     
     return round(px / convertion_factor)
     

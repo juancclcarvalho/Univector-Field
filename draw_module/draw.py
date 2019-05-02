@@ -11,7 +11,7 @@ def toggleY(x: int, y: int, matrix_h: int) -> Tuple[int, int]:
 
 
 def drawVector(field: list, origin: Tuple[int, int], end: Tuple[int, int]) -> None:
-    cv2.arrowedLine(field, origin, end, (0, 0, 255), 1)
+    cv2.arrowedLine(field, origin, end, (0, 0, 0), 1)
 
 
 def drawPoint(field: list, pos: Tuple[int, int], h: int) -> None:

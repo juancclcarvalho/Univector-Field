@@ -5,7 +5,6 @@ from draw_module import draw
 import numpy as np
 from typing import List, Tuple
 
-#TODO passing functions as args
 
 def debug(name: str, univector_field, ball: Tuple[int, int], obstacles: List[Tuple[int, int]]) -> None:
 
@@ -13,7 +12,8 @@ def debug(name: str, univector_field, ball: Tuple[int, int], obstacles: List[Tup
     px_w, px_h = measures.setArenaSize()
     step = measures.step
     
-    field = np.zeros((px_h, px_w, 3))
+    #field = np.zeros((px_h, px_w, 3))
+    field = np.full((px_h, px_w, 3), 255, dtype=np.uint8)
     vectors = getVectors(w, h, step, univector_field, ball, obstacles)
     vectorField = draw.drawVectorField(copy(field), vectors, w, h, step, ball, obstacles)
 
