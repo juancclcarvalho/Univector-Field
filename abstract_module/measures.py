@@ -24,7 +24,7 @@ elif img_h:
 else:
     convertion_factor = default_convertion_factor
 
-def setArenaSize() -> Tuple[int, int]:
+def getArenaSize() -> Tuple[int, int]:
 
     global img_w
     global img_h

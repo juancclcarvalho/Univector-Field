@@ -9,7 +9,7 @@ from typing import List, Tuple
 def debug(name: str, univector_field, ball: Tuple[int, int], obstacles: List[Tuple[int, int]]) -> None:
 
     w, h = measures.arena_w, measures.arena_h
-    px_w, px_h = measures.setArenaSize()
+    px_w, px_h = measures.getArenaSize()
     step = measures.step
     
     #field = np.zeros((px_h, px_w, 3))
