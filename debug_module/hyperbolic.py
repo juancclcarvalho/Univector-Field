@@ -11,8 +11,8 @@ def hyperbolic(r_x: int, r_y: int, ball_pos: Tuple[int, int]) -> List[float]:
     ball_x, ball_y = ball_pos
     delta_x, delta_y = math_utils.delta_axis(ball_x, ball_y, r_x, r_y)
     theta = univector.phiR(delta_x, delta_y)
-    ro = math_utils.norm(delta_x, delta_y)
-    phi_h = univector.phiH(ro, theta)
+    rho = math_utils.norm(delta_x, delta_y)
+    phi_h = univector.phiH(rho, theta)
 
     return univector.Nh(phi_h)
 

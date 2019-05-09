@@ -9,11 +9,11 @@ from typing import List, Tuple
 def debug(name: str, univector_field, ball: Tuple[int, int], obstacles: List[Tuple[int, int]]) -> None:
 
     w, h = measures.arena_w, measures.arena_h
-    px_w, px_h = measures.getArenaSize()
+    img_w, img_h = measures.getArenaSize()
     step = measures.step
     
-    #field = np.zeros((px_h, px_w, 3))
-    field = np.full((px_h, px_w, 3), 255, dtype=np.uint8)
+    #field = np.zeros((img_h, img_w, 3))
+    field = np.full((img_h, img_w, 3), 255, dtype=np.uint8)
     vectors = getVectors(w, h, step, univector_field, ball, obstacles)
     vectorField = draw.drawVectorField(copy(field), vectors, w, h, step, ball, obstacles)
 

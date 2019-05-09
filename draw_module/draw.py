@@ -1,6 +1,5 @@
-from abstract_module import measures
 import cv2
-# from measures import convertToPixel
+import measures
 import numpy as np
 from random import randint
 from typing import List, Tuple
@@ -11,7 +10,7 @@ def toggleY(x: int, y: int, matrix_h: int) -> Tuple[int, int]:
 
 
 def drawVector(field: list, origin: Tuple[int, int], end: Tuple[int, int]) -> None:
-    cv2.arrowedLine(field, origin, end, (0, 0, 0), 1)
+    cv2.arrowedLine(field, origin, end, (0, 0, 255), 1)
 
 
 def drawObj(field: list, pos: Tuple[int, int], h: int, ball = False) -> None:

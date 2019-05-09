@@ -69,7 +69,7 @@ def phiComposed(phi_tuf: float, phi_auf: float, R: float, obstacles: List[Tuple]
     return math_utils.wrapToPi(phi_composed)      
 
 
-def phiH(ro: float, theta: float, cw: bool = False, radius: float = de, kr: float = kr) -> float: # Hyperbolic
+def phiH(rho: float, theta: float, cw: bool = False, radius: float = de, kr: float = kr) -> float: # Hyperbolic
     '''
     Returns a coefficient of a hyperbolic spiral that guides the robot to the ball
     '''
@@ -78,10 +78,10 @@ def phiH(ro: float, theta: float, cw: bool = False, radius: float = de, kr: floa
     the clockwise direction becomes counterclockwise and vice versa
     '''
 
-    if ro > radius:
-        angle = (pi / 2) * (2 - ((radius + kr) / (ro + kr)))
-    elif 0 <= ro <= radius:
-        angle = (pi / 2) * sqrt(ro / radius)
+    if rho > radius:
+        angle = (pi / 2) * (2 - ((radius + kr) / (rho + kr)))
+    elif 0 <= rho <= radius:
+        angle = (pi / 2) * sqrt(rho / radius)
 
     if cw:
         return math_utils.wrapToPi(theta + angle)
